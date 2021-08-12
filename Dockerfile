@@ -8,6 +8,7 @@ WORKDIR ${BUILD_PATH}
 
 # system libs layer
 RUN apt-get -qq update && apt-get -qq install --no-install-recommends -y \
+    supervisor \
     gcc \
     ca-certificates \
     libopus-dev \
