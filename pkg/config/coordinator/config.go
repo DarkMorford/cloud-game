@@ -11,17 +11,20 @@ import (
 )
 
 type Config struct {
-	Coordinator struct {
+	Coordinator Coordinator
+	Emulator    emulator.Emulator
+	Environment shared.Environment
+	Webrtc      webrtcConfig.Webrtc
+}
+
+type Coordinator struct {
+	RoundRobin bool
 		DebugHost  string
 		Library    games.Config
 		Monitoring monitoring.Config
 		Server     shared.Server
 		Analytics  Analytics
 	}
-	Emulator    emulator.Emulator
-	Environment shared.Environment
-	Webrtc      webrtcConfig.Webrtc
-}
 
 // Analytics is optional Google Analytics
 type Analytics struct {
