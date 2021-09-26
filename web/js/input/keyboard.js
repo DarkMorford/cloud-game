@@ -87,7 +87,7 @@ const keyboard = (() => {
             if (dpadMode) {
               callback(key);
             } else {
-              if (key === KEY.LEFT || key == KEY.RIGHT) {
+              if (key === KEY.LEFT || key === KEY.RIGHT) {
                 value = (dpadState[KEY.RIGHT] === true ? 1 : 0) - (dpadState[KEY.LEFT] === true ? 1 : 0)
                 event.pub(AXIS_CHANGED, {id: 0, value: value});
               } else {
