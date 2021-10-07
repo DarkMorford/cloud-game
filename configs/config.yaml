@@ -158,6 +158,10 @@ emulator:
         mame:
           lib: fbneo_libretro
           roms: [ "zip" ]
+        genesis:
+          lib: genesis_plus_gx_libretro
+          config: genesis_plus_gx_libretro.cfg
+          roms: [ "md" ]
         nes:
           lib: nestopia_libretro
           roms: [ "nes" ]

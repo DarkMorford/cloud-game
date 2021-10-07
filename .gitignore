@@ -64,3 +64,5 @@ release/
 vendor/
 
 .dockerignore
+
+assets/cores/*.so
