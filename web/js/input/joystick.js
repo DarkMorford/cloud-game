@@ -241,6 +241,16 @@ const joystick = (() => {
             }
         }
 
+        // Custom bindings for Ian's setup
+        if (gamepad.id.includes('BGC-FC801')) {
+            joystickMap = {
+                0: KEY.Y,
+                1: KEY.B,
+                2: KEY.A,
+                7: KEY.START,
+            };
+        }
+
         // reset state
         joystickState = {[KEY.LEFT]: false, [KEY.RIGHT]: false, [KEY.UP]: false, [KEY.DOWN]: false};
         Object.keys(joystickMap).forEach(function (btnIdx) {
