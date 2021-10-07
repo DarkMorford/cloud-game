@@ -95,7 +95,7 @@ emulator:
   aspectRatio:
     # enable aspect ratio changing
     # (experimental)
-    keep: false
+    keep: true
     # recalculate emulator game frame size to the given WxH
     width: 320
     height: 240

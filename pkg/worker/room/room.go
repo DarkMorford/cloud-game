@@ -192,7 +192,7 @@ func NewRoom(roomID string, game games.GameMetadata, recUser string, rec bool, o
 		emu, ar := cfg.Emulator, cfg.Emulator.AspectRatio
 
 		if ar.Keep {
-			baseAspectRatio := float64(gameMeta.BaseWidth) / float64(ar.Height)
+			baseAspectRatio := float64(gameMeta.BaseWidth) / float64(gameMeta.BaseHeight)
 			nwidth, nheight = resizeToAspect(baseAspectRatio, ar.Width, ar.Height)
 			log.Printf("Viewport size will be changed from %dx%d (%f) -> %dx%d", ar.Width, ar.Height,
 				baseAspectRatio, nwidth, nheight)
