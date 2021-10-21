@@ -12,6 +12,7 @@ func (na *naEmulator) Save() (err error) {
 		err = toFile(na.GetSRAMPath(), sramState)
 	}
 	if saveState, err := getSaveState(); err == nil {
+		toFile(na.GetTimestampedPath(), saveState)
 		return toFile(na.GetHashPath(), saveState)
 	}
 	return

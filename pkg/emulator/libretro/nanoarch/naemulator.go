@@ -7,6 +7,7 @@ import (
 	"image"
 	"log"
 	"net"
+	"strconv"
 	"sync"
 	"time"
 
@@ -252,6 +253,10 @@ func (na *naEmulator) ToggleMultitap() error {
 }
 
 func (na *naEmulator) GetHashPath() string { return na.storage.Path + "/" + na.storage.MainSave }
+
+func (na *naEmulator) GetTimestampedPath() string {
+	return na.storage.Path + "/" + strconv.FormatInt(time.Now().Unix(), 10) + "." + na.storage.MainSave
+}
 
 func (na *naEmulator) GetSRAMPath() string { return na.storage.Path + "/" + na.roomID + ".srm" }
 
