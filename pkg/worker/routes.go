@@ -14,7 +14,8 @@ func (h *Handler) routes() {
 	h.oClient.Receive(api.IceCandidate, h.handleIceCandidate())
 
 	h.oClient.Receive(api.GameStart, h.handleGameStart())
-	h.oClient.Receive(api.GameQuit, h.handleGameReset())
+	h.oClient.Receive(api.GameReset, h.handleGameReset())
+	h.oClient.Receive(api.GameQuit, h.handleGameQuit())
 	h.oClient.Receive(api.GameSave, h.handleGameSave())
 	h.oClient.Receive(api.GameLoad, h.handleGameLoad())
 	h.oClient.Receive(api.GamePlayerSelect, h.handleGamePlayerSelect())
