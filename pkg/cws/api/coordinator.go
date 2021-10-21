@@ -15,6 +15,7 @@ const (
 	Answer     = "answer"
 
 	GameStart        = "start"
+	GameReset        = "reset"
 	GameQuit         = "quit"
 	GameSave         = "save"
 	GameLoad         = "load"

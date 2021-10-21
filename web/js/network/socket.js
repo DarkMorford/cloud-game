@@ -128,6 +128,7 @@ const socket = (() => {
         "room_id": roomId != null ? roomId : '',
         "player_index": playerIndex
     });
+    const resetGame = (roomId) => send({"id": "reset", "data": "", "room_id": roomId});
     const quitGame = (roomId) => send({"id": "quit", "data": "", "room_id": roomId});
     const toggleMultitap = () => send({"id": "multitap", "data": ""});
 
@@ -140,6 +141,7 @@ const socket = (() => {
         loadGame: loadGame,
         updatePlayerIndex: updatePlayerIndex,
         startGame: startGame,
+        resetGame: resetGame,
         quitGame: quitGame,
         toggleMultitap: toggleMultitap,
     }

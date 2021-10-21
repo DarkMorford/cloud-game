@@ -160,12 +160,12 @@ func (h *Handler) handleGameReset() cws.PacketHandler {
 	return func(resp cws.WSPacket) (req cws.WSPacket) {
 		log.Println("Received a reset game from coordinator")
 		log.Println("Loading default game state")
-		req.ID = api.GameQuit
+		req.ID = api.GameReset
 		req.Data = "ok"
 		if resp.RoomID != "" {
 			room := h.getRoom(resp.RoomID)
 			dstPath := room.GetSaveStatePath()
-			copyFile("assets/saves/default.dat", dstPath)
+			copyFile("assets/games/states/default.dat", dstPath)
 			err := room.LoadGame()
 			if err != nil {
 				log.Println("[!] Cannot load game state: ", err)
