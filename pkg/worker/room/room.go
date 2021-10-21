@@ -5,7 +5,6 @@ import (
 	"encoding/gob"
 	"fmt"
 	"io"
-	"io/ioutil"
 	"log"
 	"math"
 	"net"
@@ -150,10 +149,12 @@ func NewRoom(roomID string, game games.GameMetadata, onlineStorage *storage.Clie
 		}
 
 		// Check room is on local or fetch from server
-		log.Printf("Check %s on online storage: %v", roomID, isGameOnLocal(store.MainSave))
-		if err := room.saveOnlineRoomToLocal(roomID, store.MainSave); err != nil {
-			log.Printf("Warn: Room %s is not in online storage, error %s", roomID, err)
-		}
+		/*
+			log.Printf("Check %s on online storage: %v", roomID, isGameOnLocal(store.MainSave))
+			if err := room.saveOnlineRoomToLocal(roomID, store.MainSave); err != nil {
+				log.Printf("Warn: Room %s is not in online storage, error %s", roomID, err)
+			}
+		*/
 
 		// If not then load room or create room from local.
 		log.Printf("Room %s started. GameName: %s, WithGame: %t", roomID, game.Name, cfg.Encoder.WithoutGame)
@@ -353,10 +354,12 @@ func (r *Room) Close() {
 
 func (r *Room) isRoomExisted() bool {
 	// Check if room is in online storage
-	_, err := r.onlineStorage.LoadFile(r.ID)
-	if err == nil {
-		return true
-	}
+	/*
+		_, err := r.onlineStorage.LoadFile(r.ID)
+		if err == nil {
+			return true
+		}
+	*/
 	return isGameOnLocal(r.director.GetHashPath())
 }
 
@@ -364,9 +367,11 @@ func (r *Room) isRoomExisted() bool {
 func (r *Room) SaveGame() error {
 	onlineSaveFunc := func() error {
 		// Try to save the game to gCloud
-		if err := r.onlineStorage.SaveFile(r.ID, r.director.GetHashPath()); err != nil {
-			return err
-		}
+		/*
+			if err := r.onlineStorage.SaveFile(r.ID, r.director.GetHashPath()); err != nil {
+				return err
+			}
+		*/
 
 		return nil
 	}
@@ -382,17 +387,19 @@ func (r *Room) SaveGame() error {
 // saveOnlineRoomToLocal save online room to local.
 // !Supports only one file of main save state.
 func (r *Room) saveOnlineRoomToLocal(roomID string, savePath string) error {
-	log.Println("Check if game is on cloud storage")
-	// If the game is not on local server
-	// Try to load from gcloud
-	data, err := r.onlineStorage.LoadFile(roomID)
-	if err != nil {
-		return err
-	}
-	// Save the data fetched from gcloud to local server
-	if data != nil {
-		_ = ioutil.WriteFile(savePath, data, 0644)
-	}
+	/*
+		log.Println("Check if game is on cloud storage")
+		// If the game is not on local server
+		// Try to load from gcloud
+		data, err := r.onlineStorage.LoadFile(roomID)
+		if err != nil {
+			return err
+		}
+		// Save the data fetched from gcloud to local server
+		if data != nil {
+			_ = ioutil.WriteFile(savePath, data, 0644)
+		}
+	*/
 	return nil
 }
 
