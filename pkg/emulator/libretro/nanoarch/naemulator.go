@@ -50,6 +50,7 @@ void coreLog_cgo(enum retro_log_level level, const char *msg);
 */
 import "C"
 
+// naEmulator implements CloudEmulator
 type naEmulator struct {
 	sync.Mutex
 
@@ -64,14 +65,20 @@ type naEmulator struct {
 	gameName        string
 	isSavingLoading bool
 	storage         Storage
-	saveCompression bool
-
-	// out frame size
-	vw, vh int
 
 	players Players
 
 	done chan struct{}
+}
+
+type Storage struct {
+	// save path without the dir slash in the end
+	Path string
+	// contains the name of the main save file
+	// e.g. abc<...>293.dat
+	// needed for Google Cloud save/restore which
+	// doesn't support multiple files
+	MainSave string
 }
 
 // VideoExporter produces image frame to unix socket
@@ -82,11 +89,12 @@ type VideoExporter struct {
 
 // GameFrame contains image and timeframe
 type GameFrame struct {
-	Data     *image.RGBA
-	Duration time.Duration
+	Image     *image.RGBA
+	Timestamp uint32
 }
 
 var NAEmulator *naEmulator
+var outputImg *image.RGBA
 
 // NAEmulator implements CloudEmulator interface based on NanoArch(golang RetroArch)
 func NewNAEmulator(roomID string, inputChannel <-chan InputEvent, storage Storage, conf config.LibretroCoreConfig) (*naEmulator, chan GameFrame, chan []int16) {
@@ -176,43 +184,50 @@ func (na *naEmulator) LoadMeta(path string) emulator.Metadata {
 	return na.meta
 }
 
-func (na *naEmulator) SetViewport(width int, height int) { na.vw, na.vh = width, height }
+func (na *naEmulator) SetViewport(width int, height int) {
+	// outputImg is tmp img used for decoding and reuse in encoding flow
+	outputImg = image.NewRGBA(image.Rect(0, 0, width, height))
+}
 
 func (na *naEmulator) Start() {
-	err := na.LoadGame()
-	if err != nil {
-		log.Printf("error: couldn't load a save, %v", err)
-	}
-
-	framerate := 1 / na.meta.Fps
-	log.Printf("framerate: %vms", framerate)
+	na.playGame()
 	ticker := time.NewTicker(time.Second / time.Duration(na.meta.Fps))
-	defer ticker.Stop()
 
-	lastFrameTime = time.Now()
-
-	for {
-		na.Lock()
-		nanoarchRun()
-		na.Unlock()
-
+	for range ticker.C {
 		select {
-		case <-ticker.C:
-			continue
+		// Slow response here
 		case <-na.done:
 			nanoarchShutdown()
 			close(na.imageChannel)
 			close(na.audioChannel)
 			log.Println("Closed Director")
 			return
+		default:
 		}
+
+		na.Lock()
+		nanoarchRun()
+		na.Unlock()
 	}
 }
 
-func (na *naEmulator) SaveGame() error {
+func (na *naEmulator) playGame() {
+	// When start game, we also try loading if there was a saved state
+	na.LoadGame()
+}
+
+func (na *naEmulator) SaveGame(saveExtraFunc func() error) error {
 	if na.roomID != "" {
-		return na.Save()
+		err := na.Save()
+		if err != nil {
+			return err
+		}
+		err = saveExtraFunc()
+		if err != nil {
+			return err
+		}
 	}
+
 	return nil
 }
 
@@ -220,9 +235,11 @@ func (na *naEmulator) LoadGame() error {
 	if na.roomID != "" {
 		err := na.Load()
 		if err != nil {
+			log.Println("Error: Cannot load", err)
 			return err
 		}
 	}
+
 	return nil
 }
 
@@ -230,11 +247,22 @@ func (na *naEmulator) ToggleMultitap() error {
 	if na.roomID != "" {
 		toggleMultitap()
 	}
+
 	return nil
 }
 
 func (na *naEmulator) GetHashPath() string { return na.storage.GetSavePath() }
 
-func (na *naEmulator) GetSRAMPath() string { return na.storage.GetSRAMPath() }
+func (na *naEmulator) GetTimestampedPath() string {
+	return na.storage.Path + "/" + strconv.FormatInt(time.Now().Unix(), 10) + "." + na.storage.MainSave
+}
 
-func (na *naEmulator) Close() { close(na.done) }
+func (na *naEmulator) GetSRAMPath() string { return na.storage.Path + "/" + na.roomID + ".srm" }
+
+func (*naEmulator) GetViewport() interface{} {
+	return outputImg
+}
+
+func (na *naEmulator) Close() {
+	close(na.done)
+}
