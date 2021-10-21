@@ -285,6 +285,10 @@ func isGameOnLocal(path string) bool {
 	return !errors.Is(err, os.ErrNotExist)
 }
 
+func (r *Room) GetSaveStatePath() string {
+	return r.director.GetHashPath()
+}
+
 func (r *Room) AddConnectionToRoom(peerconnection *webrtc.WebRTC) {
 	peerconnection.AttachRoomID(r.ID)
 	r.rtcSessions = append(r.rtcSessions, peerconnection)
