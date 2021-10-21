@@ -1,7 +1,10 @@
 package worker
 
 import (
+	"fmt"
+	"io"
 	"log"
+	"os"
 	"strconv"
 
 	webrtcConfig "github.com/giongto35/cloud-game/v2/pkg/config/webrtc"
@@ -11,6 +14,31 @@ import (
 	"github.com/giongto35/cloud-game/v2/pkg/webrtc"
 	"github.com/giongto35/cloud-game/v2/pkg/worker/room"
 )
+
+func copyFile(src, dst string) (int64, error) {
+	sourceFileStat, err := os.Stat(src)
+	if err != nil {
+		return 0, err
+	}
+
+	if !sourceFileStat.Mode().IsRegular() {
+		return 0, fmt.Errorf("%s is not a regular file", src)
+	}
+
+	source, err := os.Open(src)
+	if err != nil {
+		return 0, err
+	}
+	defer source.Close()
+
+	destination, err := os.Create(dst)
+	if err != nil {
+		return 0, err
+	}
+	defer destination.Close()
+	nBytes, err := io.Copy(destination, source)
+	return nBytes, err
+}
 
 func (h *Handler) handleServerId() cws.PacketHandler {
 	return func(resp cws.WSPacket) (req cws.WSPacket) {
@@ -125,6 +153,29 @@ func (h *Handler) handleGameStart() cws.PacketHandler {
 		// TODO: can data race (and it does)
 		h.rooms[room.ID] = room
 		return cws.WSPacket{ID: api.GameStart, RoomID: room.ID}
+	}
+}
+
+func (h *Handler) handleGameReset() cws.PacketHandler {
+	return func(resp cws.WSPacket) (req cws.WSPacket) {
+		log.Println("Received a reset game from coordinator")
+		log.Println("Loading default game state")
+		req.ID = api.GameQuit
+		req.Data = "ok"
+		if resp.RoomID != "" {
+			room := h.getRoom(resp.RoomID)
+			dstPath := room.GetSaveStatePath()
+			copyFile("assets/saves/default.dat", dstPath)
+			err := room.LoadGame()
+			if err != nil {
+				log.Println("[!] Cannot load game state: ", err)
+				req.Data = "error"
+			}
+		} else {
+			req.Data = "error"
+		}
+
+		return req
 	}
 }
 
