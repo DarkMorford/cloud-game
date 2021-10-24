@@ -158,6 +158,23 @@ func (bc *BrowserClient) handleGameLoad(o *Server) cws.PacketHandler {
 	}
 }
 
+func (bc *BrowserClient) handleGameReset(o *Server) cws.PacketHandler {
+	return func(resp cws.WSPacket) (req cws.WSPacket) {
+		bc.Println("Received reset request from a browser -> relay to worker")
+
+		// TODO: Async
+		resp.SessionID = bc.SessionID
+		resp.RoomID = bc.RoomID
+		wc, ok := o.workerClients[bc.WorkerID]
+		if !ok {
+			return cws.EmptyPacket
+		}
+		resp = wc.SyncSend(resp)
+
+		return resp
+	}
+}
+
 func (bc *BrowserClient) handleGamePlayerSelect(o *Server) cws.PacketHandler {
 	return func(resp cws.WSPacket) (req cws.WSPacket) {
 		bc.Println("Received update player index request from a browser -> relay to worker")

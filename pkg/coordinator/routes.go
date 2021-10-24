@@ -27,6 +27,7 @@ func (s *Server) useragentRoutes(bc *BrowserClient) {
 	bc.Receive(api.GameQuit, bc.handleGameQuit(s))
 	bc.Receive(api.GameSave, bc.handleGameSave(s))
 	bc.Receive(api.GameLoad, bc.handleGameLoad(s))
+	bc.Receive(api.GameReset, bc.handleGameReset(s))
 	bc.Receive(api.GamePlayerSelect, bc.handleGamePlayerSelect(s))
 	bc.Receive(api.GameMultitap, bc.handleGameMultitap(s))
 	bc.Receive(api.GameRecording, bc.handleGameRecording(s))
