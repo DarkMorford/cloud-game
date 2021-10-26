@@ -258,6 +258,15 @@ body {
     background-image: url('/static/img/ui/bt SHARE.png');
 }
 
+#btn-reset {
+    width: 46px;
+    top: 70px;
+    left: 22px;
+    height: 25px;
+
+    background-image: url('/static/img/ui/bt RESET.png');
+}
+
 #btn-quit {
     width: 46px;
     top: 70px;

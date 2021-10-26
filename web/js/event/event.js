@@ -62,6 +62,7 @@ const PING_RESPONSE = 'pingResponse';
 const GAME_ROOM_AVAILABLE = 'gameRoomAvailable';
 const GAME_SAVED = 'gameSaved';
 const GAME_LOADED = 'gameLoaded';
+const GAME_RESET = 'gameReset';
 // used to transfer the index value between touch and controller
 const GAME_PLAYER_IDX_CHANGE = 'gamePlayerIndexChange';
 const GAME_PLAYER_IDX = 'gamePlayerIndex';
