@@ -125,6 +125,7 @@ const socket = (() => {
     });
     const saveGame = () => send({"id": "save", "data": ""});
     const loadGame = () => send({"id": "load", "data": ""});
+    const resetGame = (roomId) => send({"id": "reset", "data": ""});
     const updatePlayerIndex = (idx) => send({"id": "player_index", "data": idx.toString()});
     const startGame = (gameName, isMobile, roomId, record, recordUser, playerIndex) => send({
         "id": "start",
@@ -136,7 +137,6 @@ const socket = (() => {
         "room_id": roomId != null ? roomId : '',
         "player_index": playerIndex
     });
-    const resetGame = (roomId) => send({"id": "reset", "data": "", "room_id": roomId});
     const quitGame = (roomId) => send({"id": "quit", "data": "", "room_id": roomId});
     const toggleMultitap = () => send({"id": "multitap", "data": ""});
     const toggleRecording = (active = false, userName = '') => send({

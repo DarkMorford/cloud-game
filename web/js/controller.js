@@ -60,7 +60,7 @@
     };
 
     const onGameRoomAvailable = () => {
-        message.show('Now you can share you game!');
+        message.show('Now you can share your game!');
     };
 
     const onConnectionReady = () => {
@@ -160,6 +160,7 @@
 
     const saveGame = utils.debounce(socket.saveGame, 1000);
     const loadGame = utils.debounce(socket.loadGame, 1000);
+    const resetGame = utils.debounce(socket.resetGame, 1000);
 
     const _dpadArrowKeys = [KEY.UP, KEY.DOWN, KEY.LEFT, KEY.RIGHT];
 
@@ -367,6 +368,9 @@
                         case KEY.LOAD:
                             loadGame();
                             break;
+                        case KEY.RESET:
+                            resetGame();
+                            break;
                         case KEY.FULL:
                             stream.video.toggleFullscreen();
                             break;
@@ -420,6 +424,7 @@
     event.sub(GAME_ROOM_AVAILABLE, onGameRoomAvailable, 2);
     event.sub(GAME_SAVED, () => message.show('Saved'));
     event.sub(GAME_LOADED, () => message.show('Loaded'));
+    event.sub(GAME_RESET, () => message.show('Reset'));
     event.sub(GAME_PLAYER_IDX_CHANGE, data => {
         updatePlayerIndex(data.index);
     });
