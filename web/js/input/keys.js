@@ -30,6 +30,7 @@ const KEY = (() => {
         L3: 'l3',
         R3: 'r3',
         MULTITAP: 'multitap',
+        RESET: 'reset',
         REC: 'rec',
     }
 })();
