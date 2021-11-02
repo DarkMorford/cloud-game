@@ -4,7 +4,7 @@
 
 # application environment (dev, staging, prod)
 # deprecated
-environment: dev
+environment: prod
 
 coordinator:
   # address if the server want to connect directly to debug
@@ -148,20 +148,10 @@ emulator:
         gba:
           lib: mgba_libretro
           roms: [ "gba", "gbc" ]
-        pcsx:
-          lib: pcsx_rearmed_libretro
-          roms: [ "cue" ]
-          # example of folder override
-          folder: psx
-        # MAME core requires additional manual setup, please read:
-        # https://docs.libretro.com/library/fbneo/
-        mame:
-          lib: fbneo_libretro
-          roms: [ "zip" ]
         genesis:
           lib: genesis_plus_gx_libretro
           config: genesis_plus_gx_libretro.cfg
-          roms: [ "md" ]
+          roms: [ "md", "cue" ]
         nes:
           lib: nestopia_libretro
           roms: [ "nes" ]
@@ -169,12 +159,6 @@ emulator:
           lib: snes9x_libretro
           roms: [ "smc", "sfc", "swc", "fig", "bs" ]
           hasMultitap: true
-        n64:
-          lib: mupen64plus_next_libretro
-          config: mupen64plus_next_libretro.cfg
-          roms: [ "n64", "v64", "z64" ]
-          isGlAllowed: true
-          usesLibCo: true
 
 encoder:
   audio:
@@ -219,8 +203,8 @@ webrtc:
   # WebRTC UDP connections, these params
   # define ICE candidates port range explicitly
   icePorts:
-    min:
-    max:
+    min: 15000
+    max: 16999
   # override ICE candidate IP, see: https://github.com/pion/webrtc/issues/835,
   # can be used for Docker bridged network internal IP override
   iceIpMap:
