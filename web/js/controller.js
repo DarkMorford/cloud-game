@@ -202,7 +202,7 @@
         // maybe move it somewhere
         if (!interacted) {
             // unmute when there is user interaction
-            stream.audio.mute(false);
+            // stream.audio.mute(false);
             interacted = true;
         }
 
@@ -225,7 +225,7 @@
         // maybe move it somewhere
         if (!interacted) {
             // unmute when there is user interaction
-            stream.audio.mute(false);
+            // stream.audio.mute(false);
             interacted = true;
         }
 
