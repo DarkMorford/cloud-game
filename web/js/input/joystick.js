@@ -241,6 +241,33 @@ const joystick = (() => {
             }
         }
 
+        /******************************
+         * Desert Bus button mapping
+         ******************************
+         * 
+         * KEY.Y     => Accelerator (GEN A)
+         * KEY.B     => Brake (GEN B)
+         * KEY.A     => Bus Door (GEN C)
+         * KEY.START => Horn (GEN START)
+         * 
+         *****************************/
+
+        // PS4 controller (Johnny/moonbase)
+        if (gamepad.id.includes('Product: 05c4')) {
+            if (browser === 'chrome') {
+                joystickMap = {
+                    0: KEY.Y,
+                    1: KEY.B,
+                    3: KEY.A,
+                    2: KEY.START,
+                    12: KEY.UP,
+                    13: KEY.DOWN,
+                    14: KEY.LEFT,
+                    15: KEY.RIGHT,
+                };
+            }
+        }
+
         // Custom bindings for Ian's setup
         if (gamepad.id.includes('BGC-FC801')) {
             joystickMap = {
