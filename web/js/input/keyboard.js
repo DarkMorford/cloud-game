@@ -19,17 +19,11 @@ const keyboard = (() => {
         Enter: KEY.START,
         ShiftLeft: KEY.SELECT,
         // non-game
-        KeyQ: KEY.QUIT,
-        KeyW: KEY.JOIN,
-        KeyK: KEY.SAVE,
-        KeyL: KEY.LOAD,
         Digit1: KEY.PAD1,
         Digit2: KEY.PAD2,
         Digit3: KEY.PAD3,
         Digit4: KEY.PAD4,
         KeyF: KEY.FULL,
-        KeyH: KEY.HELP,
-        Backslash: KEY.STATS,
         Digit9: KEY.SETTINGS,
         KeyM: KEY.MULTITAP,
         KeyT: KEY.DTOGGLE
