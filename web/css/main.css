@@ -372,7 +372,7 @@ body {
     -webkit-transform: translateX(-50%);
     -moz-transform: translateX(-50%);
 
-    background-image: url('/static/img/ui/bt B.png');
+    background-image: url('/static/img/ui/bt X.png');
 }
 
 #btn-x {
@@ -393,7 +393,7 @@ body {
     -webkit-transform: translateY(-50%);
     -moz-transform: translateY(-50%);
 
-    background-image: url('/static/img/ui/bt A.png');
+    background-image: url('/static/img/ui/bt Z.png');
 }
 
 #btn-settings {
