@@ -4,7 +4,7 @@
 
 # application environment (dev, staging, prod)
 # deprecated
-environment: prod
+environment: dev
 
 coordinator:
   # address if the server want to connect directly to debug

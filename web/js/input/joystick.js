@@ -244,6 +244,23 @@ const joystick = (() => {
             }
         }
 
+        // Xbox controller (Paul)
+        if (gamepad.id.includes('Xbox 360')) {
+            if (browser === 'chrome') {
+                joystickMap = {
+                    0: KEY.B,
+                    1: KEY.A,
+                    2: KEY.Y,
+                    8: KEY.RESET,
+                    9: KEY.START,
+                    12: KEY.UP,
+                    13: KEY.DOWN,
+                    14: KEY.LEFT,
+                    15: KEY.RIGHT,
+                };
+            }
+        }
+
         // Custom bindings for Ian's setup
         if (gamepad.id.includes('BGC-FC801')) {
             joystickMap = {
