@@ -383,21 +383,24 @@ func (r *Room) Close() {
 	r.IsRunning = false
 	log.Println("Closing room and director of room ", r.ID)
 
-	// Save game before quit. Only save for game which was previous saved to avoid flooding database
-	if r.isRoomExisted() {
-		log.Println("Saved Game before closing room")
-		// use goroutine here because SaveGame attempt to acquire a emulator lock.
-		// the lock is holding before coming to close, so it will cause deadlock if SaveGame is synchronous
-		go func() {
-			// Save before close, so save can have correct state (Not sure) may again cause deadlock
-			if err := r.SaveGame(); err != nil {
-				log.Println("[error] couldn't save the game during closing")
-			}
+	/*
+		// Save game before quit. Only save for game which was previous saved to avoid flooding database
+		if r.isRoomExisted() {
+			log.Println("Saved Game before closing room")
+			// use goroutine here because SaveGame attempt to acquire a emulator lock.
+			// the lock is holding before coming to close, so it will cause deadlock if SaveGame is synchronous
+			go func() {
+				// Save before close, so save can have correct state (Not sure) may again cause deadlock
+				if err := r.SaveGame(); err != nil {
+					log.Println("[error] couldn't save the game during closing")
+				}
+				r.director.Close()
+			}()
+		} else {
 			r.director.Close()
-		}()
-	} else {
-		r.director.Close()
-	}
+		}
+	*/
+	r.director.Close()
 	log.Println("Closing input of room ", r.ID)
 	close(r.inputChannel)
 	//close(r.voiceOutChannel)

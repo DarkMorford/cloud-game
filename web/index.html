@@ -51,10 +51,10 @@
 
     <div id="guide-txt">
         <b>Arrows</b> (steer/change letter),
-        <b>Z</b> (accelerate/erase letter),
-        <b>X</b> (brake/enter letter),
-        <b>C</b> (door),
-        <b>Enter</b> (start/horn),
+        <b>Z/Cross</b> (accelerate/erase letter),
+        <b>X/Circle</b> (brake/enter letter),
+        <b>C/Triangle</b> (door),
+        <b>Enter/Square</b> (start/horn),
         <b>F</b> (fullscreen)
     </div>
     <div id="btn-load" class="btn big unselectable" value="load"></div>
@@ -112,10 +112,12 @@
     </div>
 </div>
 
+<!--
 <a id="ribbon" style="position: fixed; right: 0; top: 0;" href="https://github.com/giongto35/cloud-game"><img
         width="149" height="149"
         src="https://github.blog/wp-content/uploads/2008/12/forkme_right_gray_6d6d6d.png?resize=149%2C149"
         class="attachment-full size-full" alt="Fork me on GitHub" data-recalc-dims="1"></a>
+-->
 
 <div id="version">
     <span id="v"></span>
@@ -139,13 +141,14 @@
 <script src="/static/js/network/rtcp.js?v=3"></script>
 <script src="/static/js/stats/stats.js?v=2"></script>
 <script src="/static/js/controller.js?v=6"></script>
-<script src="/static/js/input/keyboard.js?v=5"></script>
+<script src="/static/js/input/keyboard.js?v=6"></script>
 <script src="/static/js/input/touch.js?v=3"></script>
-<script src="/static/js/input/joystick.js?v=3"></script>
+<script src="/static/js/input/joystick.js?v=4"></script>
 
 <script src="/static/js/init.js?v=5"></script>
 
 {{if .Inject}}
+<!--
 <script async src="https://www.googletagmanager.com/gtag/js?id={{.Gtag}}"></script>
 <script>
     window.dataLayer = window.dataLayer || [];
@@ -153,6 +156,7 @@
     gtag('js', new Date());
     gtag('config', '{{.Gtag}}');
 </script>
+-->
 {{end}}
 
 </body>
