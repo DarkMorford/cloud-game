@@ -1,6 +1,9 @@
 package thread
 
-import "testing"
+import (
+	"runtime"
+	"testing"
+)
 
 func init() {
 	runtime.LockOSThread()

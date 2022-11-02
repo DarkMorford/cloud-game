@@ -4,12 +4,13 @@ import (
 	"bytes"
 	"encoding/json"
 	"errors"
-	"github.com/rs/xid"
 	"log"
 	"math"
 	"net"
 	"net/http"
 	"strings"
+
+	"github.com/rs/xid"
 
 	"github.com/giongto35/cloud-game/v2/pkg/config/coordinator"
 	"github.com/giongto35/cloud-game/v2/pkg/cws"

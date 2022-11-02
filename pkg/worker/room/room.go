@@ -158,10 +158,10 @@ func NewRoom(roomID string, game games.GameMetadata, recUser string, rec bool, o
 
 		// Check room is on local or fetch from server
 		/*
-		log.Printf("Check for %s in the online storage", roomID)
-		if err := room.saveOnlineRoomToLocal(roomID, store.GetSavePath()); err != nil {
-			log.Printf("warn: room %s is not in the online storage, error %s", roomID, err)
-		}
+			log.Printf("Check for %s in the online storage", roomID)
+			if err := room.saveOnlineRoomToLocal(roomID, store.GetSavePath()); err != nil {
+				log.Printf("warn: room %s is not in the online storage, error %s", roomID, err)
+			}
 		*/
 
 		// If not then load room or create room from local.
@@ -420,10 +420,10 @@ func (r *Room) Close() {
 func (r *Room) isRoomExisted() bool {
 	// Check if room is in online storage
 	/*
-	_, err := r.onlineStorage.Load(r.ID)
-	if err == nil {
-		return true
-	}
+		_, err := r.onlineStorage.Load(r.ID)
+		if err == nil {
+			return true
+		}
 	*/
 	return isGameOnLocal(r.director.GetHashPath())
 }
@@ -436,9 +436,9 @@ func (r *Room) SaveGame() error {
 		return err
 	}
 	/*
-	if err := r.onlineStorage.Save(r.ID, r.director.GetHashPath()); err != nil {
-		return err
-	}
+		if err := r.onlineStorage.Save(r.ID, r.director.GetHashPath()); err != nil {
+			return err
+		}
 	*/
 	log.Printf("success, cloud save")
 	return nil
@@ -447,18 +447,18 @@ func (r *Room) SaveGame() error {
 // saveOnlineRoomToLocal save online room to local.
 // !Supports only one file of main save state.
 func (r *Room) saveOnlineRoomToLocal(roomID string, savePath string) error {
-    /*
-	data, err := r.onlineStorage.Load(roomID)
-	if err != nil {
-		return err
-	}
-	// Save the data fetched from a cloud provider to the local server
-	if data != nil {
-		if err := ioutil.WriteFile(savePath, data, 0644); err != nil {
+	/*
+		data, err := r.onlineStorage.Load(roomID)
+		if err != nil {
 			return err
 		}
-		log.Printf("successfully downloaded cloud save")
-	}
+		// Save the data fetched from a cloud provider to the local server
+		if data != nil {
+			if err := ioutil.WriteFile(savePath, data, 0644); err != nil {
+				return err
+			}
+			log.Printf("successfully downloaded cloud save")
+		}
 	*/
 	return nil
 }

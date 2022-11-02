@@ -30,7 +30,7 @@ func DrawRgbaImage(pixFormat Format, rotationFn Rotate, scaleType int, flipV boo
 	src := getCanvas(ww, hh)
 
 	drawImage(pixFormat, w, h, packedW, bpp, flipV, rotationFn, data, src)
-	out := image.NewRGBA(image.Rect(0,0, dw, dh))
+	out := image.NewRGBA(image.Rect(0, 0, dw, dh))
 	Resize(scaleType, src, out)
 	return out
 }

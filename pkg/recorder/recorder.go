@@ -70,9 +70,10 @@ func init() {
 // FFMPEG:
 //
 // Example of conversion:
-//    ffmpeg -r 60 -f concat -i ./recording/psxtest/input.txt \
-//   		-ac 2 -channel_layout stereo -i ./recording/psxtest/audio.wav \
-//  		-b:a 192K -crf 23 -pix_fmt yuv420p out.mp4
+//
+//	  ffmpeg -r 60 -f concat -i ./recording/psxtest/input.txt \
+//	 		-ac 2 -channel_layout stereo -i ./recording/psxtest/audio.wav \
+//			-b:a 192K -crf 23 -pix_fmt yuv420p out.mp4
 func NewRecording(meta Meta, opts Options) *Recording {
 	savePath, err := filepath.Abs(opts.Dir)
 	if err != nil {

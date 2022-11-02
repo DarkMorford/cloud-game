@@ -58,7 +58,6 @@ func TestSave(t *testing.T) {
 // Emulate n ticks again.
 // Call load from the save (b).
 // Compare states (a) and (b), should be =.
-//
 func TestLoad(t *testing.T) {
 	tests := []testRun{
 		{

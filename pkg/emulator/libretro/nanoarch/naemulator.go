@@ -8,6 +8,7 @@ import (
 	"log"
 	"net"
 	"sync"
+	"time"
 
 	config "github.com/giongto35/cloud-game/v2/pkg/config/emulator"
 	"github.com/giongto35/cloud-game/v2/pkg/emulator"
@@ -49,7 +50,6 @@ void coreLog_cgo(enum retro_log_level level, const char *msg);
 */
 import "C"
 
-// naEmulator implements CloudEmulator
 type naEmulator struct {
 	sync.Mutex
 
@@ -64,20 +64,14 @@ type naEmulator struct {
 	gameName        string
 	isSavingLoading bool
 	storage         Storage
+	saveCompression bool
+
+	// out frame size
+	vw, vh int
 
 	players Players
 
 	done chan struct{}
-}
-
-type Storage struct {
-	// save path without the dir slash in the end
-	Path string
-	// contains the name of the main save file
-	// e.g. abc<...>293.dat
-	// needed for Google Cloud save/restore which
-	// doesn't support multiple files
-	MainSave string
 }
 
 // VideoExporter produces image frame to unix socket
@@ -88,8 +82,8 @@ type VideoExporter struct {
 
 // GameFrame contains image and timeframe
 type GameFrame struct {
-	Image     *image.RGBA
-	Timestamp uint32
+	Data     *image.RGBA
+	Duration time.Duration
 }
 
 var NAEmulator *naEmulator
@@ -215,18 +209,10 @@ func (na *naEmulator) playGame() {
 	na.LoadGame()
 }
 
-func (na *naEmulator) SaveGame(saveExtraFunc func() error) error {
+func (na *naEmulator) SaveGame() error {
 	if na.roomID != "" {
-		err := na.Save()
-		if err != nil {
-			return err
-		}
-		err = saveExtraFunc()
-		if err != nil {
-			return err
-		}
+		return na.Save()
 	}
-
 	return nil
 }
 
@@ -234,11 +220,9 @@ func (na *naEmulator) LoadGame() error {
 	if na.roomID != "" {
 		err := na.Load()
 		if err != nil {
-			log.Println("Error: Cannot load", err)
 			return err
 		}
 	}
-
 	return nil
 }
 
@@ -254,7 +238,7 @@ func (na *naEmulator) GetHashPath() string { return na.storage.GetSavePath() }
 
 func (na *naEmulator) GetTimestampedPath() string { return na.storage.GetTimestampedPath() }
 
-func (na *naEmulator) GetSRAMPath() string { return na.storage.Path + "/" + na.roomID + ".srm" }
+func (na *naEmulator) GetSRAMPath() string { return na.storage.GetSRAMPath() }
 
 func (*naEmulator) GetViewport() interface{} {
 	return outputImg

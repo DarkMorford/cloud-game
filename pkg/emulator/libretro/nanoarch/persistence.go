@@ -23,16 +23,24 @@ func (na *naEmulator) Save() error {
 }
 
 // Load restores the state from the filesystem.
-// Deadlock warning: locks the emulator.
-func (na *naEmulator) Load() (err error) {
+func (na *naEmulator) Load() error {
 	na.Lock()
 	defer na.Unlock()
 
-	if sramState, err := fromFile(na.GetSRAMPath()); err == nil {
-		restoreSaveRAM(sramState)
+	ss, err := na.storage.Load(na.GetHashPath())
+	if err != nil {
+		return err
 	}
-	if saveState, err := fromFile(na.GetHashPath()); err == nil {
-		return restoreSaveState(saveState)
+	if err := restoreSaveState(ss); err != nil {
+		return err
 	}
-	return
+
+	sram, err := na.storage.Load(na.GetSRAMPath())
+	if err != nil {
+		return err
+	}
+	if sram != nil {
+		restoreSaveRAM(sram)
+	}
+	return nil
 }

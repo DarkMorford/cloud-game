@@ -2,9 +2,10 @@ package coordinator
 
 import (
 	"fmt"
-	"github.com/rs/xid"
 	"log"
 	"sync"
+
+	"github.com/rs/xid"
 
 	"github.com/giongto35/cloud-game/v2/pkg/cws"
 	"github.com/gorilla/websocket"

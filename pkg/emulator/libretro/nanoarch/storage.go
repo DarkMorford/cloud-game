@@ -3,6 +3,7 @@ package nanoarch
 import (
 	"io/ioutil"
 	"path/filepath"
+	"strconv"
 	"time"
 )
 
@@ -10,6 +11,7 @@ type (
 	Storage interface {
 		GetSavePath() string
 		GetSRAMPath() string
+		GetTimestampedPath() string
 		Load(path string) ([]byte, error)
 		Save(path string, data []byte) error
 	}
