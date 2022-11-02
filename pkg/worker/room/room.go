@@ -435,9 +435,11 @@ func (r *Room) SaveGame() error {
 	if err := r.director.SaveGame(); err != nil {
 		return err
 	}
+	/*
 	if err := r.onlineStorage.Save(r.ID, r.director.GetHashPath()); err != nil {
 		return err
 	}
+	*/
 	log.Printf("success, cloud save")
 	return nil
 }

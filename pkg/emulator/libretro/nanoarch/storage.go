@@ -3,6 +3,7 @@ package nanoarch
 import (
 	"io/ioutil"
 	"path/filepath"
+	"time"
 )
 
 type (
@@ -27,3 +28,8 @@ func (s *StateStorage) GetSavePath() string                { return filepath.Joi
 func (s *StateStorage) GetSRAMPath() string                { return filepath.Join(s.Path, s.MainSave+".srm") }
 func (s *StateStorage) Load(path string) ([]byte, error)   { return ioutil.ReadFile(path) }
 func (s *StateStorage) Save(path string, dat []byte) error { return ioutil.WriteFile(path, dat, 0644) }
+func (s *StateStorage) GetTimestampedPath() string {
+	timestamp := strconv.FormatInt(time.Now().Unix(), 10)
+	filename := timestamp + "." + s.MainSave
+	return filepath.Join(s.Path, filename+".dat")
+}
