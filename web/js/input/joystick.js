@@ -261,6 +261,18 @@ const joystick = (() => {
             }
         }
 
+        // Shawn's Genesis controller
+        if (gamepad.id.includes('Product: 0025')) {
+            if (browser === 'chrome') {
+                joystickMap = {
+                    1: KEY.B,
+                    2: KEY.Y,
+                    5: KEY.A,
+                    9: KEY.START,
+                };
+            }
+        }
+
         // Custom bindings for Ian's setup
         if (gamepad.id.includes('BGC-FC801')) {
             joystickMap = {
