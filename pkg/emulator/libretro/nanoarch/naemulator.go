@@ -87,7 +87,6 @@ type GameFrame struct {
 }
 
 var NAEmulator *naEmulator
-var outputImg *image.RGBA
 
 // NAEmulator implements CloudEmulator interface based on NanoArch(golang RetroArch)
 func NewNAEmulator(roomID string, inputChannel <-chan InputEvent, storage Storage, conf config.LibretroCoreConfig) (*naEmulator, chan GameFrame, chan []int16) {
@@ -177,36 +176,37 @@ func (na *naEmulator) LoadMeta(path string) emulator.Metadata {
 	return na.meta
 }
 
-func (na *naEmulator) SetViewport(width int, height int) {
-	// outputImg is tmp img used for decoding and reuse in encoding flow
-	outputImg = image.NewRGBA(image.Rect(0, 0, width, height))
-}
+func (na *naEmulator) SetViewport(width int, height int) { na.vw, na.vh = width, height }
 
 func (na *naEmulator) Start() {
-	na.playGame()
-	ticker := time.NewTicker(time.Second / time.Duration(na.meta.Fps))
+	err := na.LoadGame()
+	if err != nil {
+		log.Printf("error: couldn't load a save, %v", err)
+	}
 
-	for range ticker.C {
+	framerate := 1 / na.meta.Fps
+	log.Printf("framerate: %vms", framerate)
+	ticker := time.NewTicker(time.Second / time.Duration(na.meta.Fps))
+	defer ticker.Stop()
+
+	lastFrameTime = time.Now()
+
+	for {
+		na.Lock()
+		nanoarchRun()
+		na.Unlock()
+
 		select {
-		// Slow response here
+		case <-ticker.C:
+			continue
 		case <-na.done:
 			nanoarchShutdown()
 			close(na.imageChannel)
 			close(na.audioChannel)
 			log.Println("Closed Director")
 			return
-		default:
 		}
-
-		na.Lock()
-		nanoarchRun()
-		na.Unlock()
 	}
-}
-
-func (na *naEmulator) playGame() {
-	// When start game, we also try loading if there was a saved state
-	na.LoadGame()
 }
 
 func (na *naEmulator) SaveGame() error {
@@ -240,10 +240,4 @@ func (na *naEmulator) GetTimestampedPath() string { return na.storage.GetTimesta
 
 func (na *naEmulator) GetSRAMPath() string { return na.storage.GetSRAMPath() }
 
-func (*naEmulator) GetViewport() interface{} {
-	return outputImg
-}
-
-func (na *naEmulator) Close() {
-	close(na.done)
-}
+func (na *naEmulator) Close() { close(na.done) }

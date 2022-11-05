@@ -6,6 +6,7 @@ import (
 	"errors"
 	"fmt"
 	"io"
+	"io/ioutil"
 	"log"
 	"math"
 	"net"
@@ -383,8 +384,8 @@ func (r *Room) Close() {
 	r.IsRunning = false
 	log.Println("Closing room and director of room ", r.ID)
 
+	// Save game before quit. Only save for game which was previous saved to avoid flooding database
 	/*
-		// Save game before quit. Only save for game which was previous saved to avoid flooding database
 		if r.isRoomExisted() {
 			log.Println("Saved Game before closing room")
 			// use goroutine here because SaveGame attempt to acquire a emulator lock.
@@ -419,12 +420,10 @@ func (r *Room) Close() {
 
 func (r *Room) isRoomExisted() bool {
 	// Check if room is in online storage
-	/*
-		_, err := r.onlineStorage.Load(r.ID)
-		if err == nil {
-			return true
-		}
-	*/
+	_, err := r.onlineStorage.Load(r.ID)
+	if err == nil {
+		return true
+	}
 	return isGameOnLocal(r.director.GetHashPath())
 }
 
@@ -447,19 +446,17 @@ func (r *Room) SaveGame() error {
 // saveOnlineRoomToLocal save online room to local.
 // !Supports only one file of main save state.
 func (r *Room) saveOnlineRoomToLocal(roomID string, savePath string) error {
-	/*
-		data, err := r.onlineStorage.Load(roomID)
-		if err != nil {
+	data, err := r.onlineStorage.Load(roomID)
+	if err != nil {
+		return err
+	}
+	// Save the data fetched from a cloud provider to the local server
+	if data != nil {
+		if err := ioutil.WriteFile(savePath, data, 0644); err != nil {
 			return err
 		}
-		// Save the data fetched from a cloud provider to the local server
-		if data != nil {
-			if err := ioutil.WriteFile(savePath, data, 0644); err != nil {
-				return err
-			}
-			log.Printf("successfully downloaded cloud save")
-		}
-	*/
+		log.Printf("successfully downloaded cloud save")
+	}
 	return nil
 }
 
